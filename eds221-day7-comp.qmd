@@ -1,0 +1,92 @@
+---
+title: "EDS221-day7
+format: html
+editor: visual
+---
+
+## 
+
+```{r}
+library(tidyverse)
+library(palmerpenguins)
+```
+
+## Data Wrangling Refresher
+
+1.  starting from penguins, write a single piped sequence in which you
+
+    1.  only include penguins at dream and bisco islands
+
+    2.  remove the year and sex variables
+
+    3.  add a new colum body_mass_kg with penguin mass converted from g to kg
+
+    4.  rename the siland variable to location
+
+    ```{r}
+    dream_biscoe <- penguins %>% 
+      filter(island %in% c("Dream", "Biscoe")) %>% 
+      select(-year, -sex) %>% 
+      mutate(body_mass_kg = body_mass_g / 1000) %>% 
+      rename(location = island)
+            
+    ```
+
+2.  Starting from penguins, write a single piped sequence to
+
+    1.  limit to Adelie penguins
+
+    2.  remove any observations where flipper_length_mm s NA (!is.na() or drop_na())
+
+    3.  group the data by sex
+
+    4.  greate a summary table that contains the mean sd and sample size of flipper lengths for male and female adelie penguins
+
+```{r}
+adelie <- penguins %>% filter(species == "Adelie") %>% 
+ drop_na(flipper_length_mm, sex) %>% 
+  group_by(sex) %>% 
+  summarise(mean_flipper = mean(flipper_length_mm), sd_flipper = sd(flipper_length_mm), sample_size = n())
+```
+
+Counts by species and island and sex
+
+```{r}
+counts_penguins <- penguins %>% count(species, island, sex)
+#count includes group_by, summarize, and n() to get counts of observations
+```
+
+```{r}
+animals <- data.frame(
+  stringsAsFactors = FALSE,
+          location = c("lagoon", "bluff", "creek", "oaks", "bluff"),
+           species = c("bobcat", "coyote", "fox", "squirrel", "bobcat"),
+          maturity = c("adult", "juvenile", "adult", "juvenile", "adult")
+)
+```
+
+```{r}
+sites <- data.frame(
+  stringsAsFactors = FALSE,
+          location = c("beach", "lagoon", "bluff", "oaks"),
+    full_site_name = c("Goleta Beach","UCSB Lagoon",
+                       "Ellwood Mesa","Fremont Campground"),
+      jurisdiction = c("SB City", "UCSB", "SB City", "USFS")
+)
+```
+
+```{r}
+full_join_example <- full_join(animals, sites)
+```
+
+```{r}
+left_join_example <- left_join(animals, sites)
+```
+
+```{r}
+inner_join_example <- inner_join(animals, sites)
+```
+
+1996-02-18T20:34-07:00
+
+2002-12-05T02:41-07:00
